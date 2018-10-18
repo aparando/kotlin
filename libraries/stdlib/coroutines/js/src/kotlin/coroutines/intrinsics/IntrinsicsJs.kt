@@ -109,6 +109,12 @@ public actual fun <R, T> (suspend R.() -> T).createCoroutineUnintercepted(
 
 /**
  * Intercepts this continuation with [ContinuationInterceptor].
+ *
+ * This function shall be used on the immediate result of [createCoroutineUnintercepted] or [suspendCoroutineUninterceptedOrReturn],
+ * in which case it checks for [ContinuationInterceptor] in the continuation's [context][Continuation.context],
+ * invokes [ContinuationInterceptor.interceptContinuation], caches and returns result.
+ *
+ * If this function is invoked on other [Continuation] instances it returns `this` continuation unchanged.
  */
 @SinceKotlin("1.3")
 public actual fun <T> Continuation<T>.intercepted(): Continuation<T> =

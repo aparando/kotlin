@@ -6,6 +6,7 @@
 package kotlin.coroutines.intrinsics
 
 import kotlin.coroutines.Continuation
+import kotlin.coroutines.ContinuationInterceptor
 
 /**
  * Starts unintercepted coroutine without receiver and with result type [T] and executes it until its first suspension.
@@ -43,5 +44,14 @@ public expect fun <R, T> (suspend R.() -> T).createCoroutineUnintercepted(
     completion: Continuation<T>
 ): Continuation<Unit>
 
+/**
+ * Intercepts this continuation with [ContinuationInterceptor].
+ *
+ * This function shall be used on the immediate result of [createCoroutineUnintercepted] or [suspendCoroutineUninterceptedOrReturn],
+ * in which case it checks for [ContinuationInterceptor] in the continuation's [context][Continuation.context],
+ * invokes [ContinuationInterceptor.interceptContinuation], caches and returns result.
+ *
+ * If this function is invoked on other [Continuation] instances it returns `this` continuation unchanged.
+ */
 @SinceKotlin("1.3")
 public expect fun <T> Continuation<T>.intercepted(): Continuation<T>
